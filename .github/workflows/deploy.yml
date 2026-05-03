@@ -8,9 +8,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      # Variabel ini ditambahkan untuk menghilangkan warning Node.js 20
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4 # <-- (Perbaikan Warning) Menggunakan versi terbaru v4
+        uses: actions/checkout@v4
 
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@master
@@ -20,9 +23,10 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            # (Perbaikan Error) Menggunakan ~/htdocs agar mulai dari folder user
             cd ~/htdocs/sertifikat.amania.id
             git pull origin main
             npm install
             npm run build
-            pm2 restart sertifikat.amania.id
+            # Mematikan proses node lama milik user ini. CloudPanel akan otomatis menyalakannya ulang.
+            # Tambahan "|| true" agar script tidak error jika kebetulan prosesnya memang sedang mati.
+            pkill -u amania-sertifikat node || true
