@@ -1,0 +1,27 @@
+name: Deploy Next.js to CloudPanel
+
+on:
+  push:
+    branches:
+      - main # Script berjalan setiap ada push ke branch main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /htdocs/sertifikat.amania.id
+            git pull origin main
+            npm install
+            npm run build
+            pm2 restart sertifikat.amania.id
