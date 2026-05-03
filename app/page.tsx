@@ -1,65 +1,222 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { Download, Loader2, User, Hash } from "lucide-react";
+import { toPng } from "html-to-image";
+import jsPDF from "jspdf";
+
+export default function CertificateView() {
+  const certificateRef = useRef<HTMLDivElement>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  // State Dinamis
+  const [participantName, setParticipantName] = useState("Prima Dzaky S.Kom, M.Kom");
+  const [certNumber, setCertNumber] = useState("ASASI-AMANIA");
+
+  const handleDownloadPDF = async () => {
+    if (!certificateRef.current) return;
+    
+    try {
+      setIsDownloading(true);
+      const element = certificateRef.current;
+
+      const imgData = await toPng(element, {
+        pixelRatio: 3, 
+        backgroundColor: '#ffffff',
+        style: {
+          transform: 'scale(1)', 
+          transformOrigin: 'top left'
+        }
+      });
+
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      
+      const safeFileName = participantName.replace(/[^a-zA-Z0-9]/g, "_");
+      pdf.save(`Sertifikat_${safeFileName}.pdf`);
+      
+    } catch (error) {
+      console.error("Gagal membuat PDF:", error);
+      alert("Terjadi kesalahan saat mengunduh sertifikat.");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div className="min-h-screen w-full bg-[#e2e8f0] flex flex-col items-center justify-center p-4 sm:p-8 font-sans">
+      
+      {/* PANEL KENDALI */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-[1000px] bg-white p-6 rounded-2xl shadow-md border border-gray-200 mb-6 relative overflow-hidden"
+      >
+        <div className="absolute top-0 left-0 w-2 h-full bg-[#4a154b]"></div>
+        <div className="flex flex-col md:flex-row gap-6 mb-2 pl-4">
+          <div className="flex-1">
+            <label className="flex items-center gap-2 text-sm font-semibold text-[#4a154b] mb-2">
+              <User size={16} /> Nama Peserta & Gelar
+            </label>
+            <input 
+              type="text" 
+              value={participantName}
+              onChange={(e) => setParticipantName(e.target.value)}
+              placeholder="Masukkan nama lengkap..."
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4a154b]/50 focus:border-[#4a154b] transition-all text-gray-800 font-medium"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+
+          <div className="flex-1">
+            <label className="flex items-center gap-2 text-sm font-semibold text-[#4a154b] mb-2">
+              <Hash size={16} /> Nomor Sertifikat
+            </label>
+            <input 
+              type="text" 
+              value={certNumber}
+              onChange={(e) => setCertNumber(e.target.value)}
+              placeholder="Contoh: ASASI/WEB/0526/001"
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4a154b]/50 focus:border-[#4a154b] transition-all text-gray-800 font-mono text-sm"
+            />
+          </div>
         </div>
-      </main>
+
+        <div className="flex justify-end mt-4 pt-4 border-t border-gray-100 pr-2">
+          <button 
+            onClick={handleDownloadPDF}
+            disabled={isDownloading || !participantName.trim()}
+            className="flex items-center gap-2 px-8 py-3 bg-[#4a154b] text-[#ffffff] rounded-full font-bold shadow-lg hover:bg-[#310e32] hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+          >
+            {isDownloading ? <Loader2 size={18} className="animate-spin" /> : <Download size={18} />}
+            {isDownloading ? "Menyiapkan Dokumen..." : "Unduh Sertifikat HD"}
+          </button>
+        </div>
+      </motion.div>
+
+      {/* WRAPPER SERTIFIKAT */}
+      <div className="w-full max-w-[1000px] overflow-x-auto shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex justify-center bg-[#ffffff]">
+        
+        {/* AREA CANVAS */}
+        <motion.div 
+          ref={certificateRef}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="relative flex-shrink-0 overflow-hidden bg-white"
+          style={{ width: "1000px", height: "707px" }} 
+        >
+          {/* BORDER DIPLOMA EKSKLUSIF */}
+          <div className="absolute inset-0 p-8 z-10 pointer-events-none">
+            <div className="w-full h-full border-[8px] border-[#4a154b] p-1.5 relative">
+              <div className="w-full h-full border-[2px] border-[#d4af37] p-1 relative">
+                 <div className="w-full h-full border-[1px] border-[#d4af37] relative">
+                    <div className="absolute -top-[14px] -left-[14px] w-6 h-6 bg-[#4a154b] border-[2px] border-[#d4af37]"></div>
+                    <div className="absolute -top-[14px] -right-[14px] w-6 h-6 bg-[#4a154b] border-[2px] border-[#d4af37]"></div>
+                    <div className="absolute -bottom-[14px] -left-[14px] w-6 h-6 bg-[#4a154b] border-[2px] border-[#d4af37]"></div>
+                    <div className="absolute -bottom-[14px] -right-[14px] w-6 h-6 bg-[#4a154b] border-[2px] border-[#d4af37]"></div>
+                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* WATERMARK LOGO */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none z-0 gap-8">
+             <img src="/asasi.png" alt="Watermark ASASI" className="w-[300px] h-[300px] object-contain grayscale" />
+          </div>
+
+          {/* KONTEN UTAMA */}
+          <div className="relative z-20 w-full h-full px-28 py-14 flex flex-col justify-between">
+            
+            {/* Header Instansi dengan 2 Logo */}
+            <div className="flex flex-col items-center mt-1">
+              <div className="flex justify-center items-center gap-8 mb-3">
+                <img src="/asasi.png" alt="Logo ASASI" className="h-14 object-contain drop-shadow-sm" />
+                <div className="h-10 w-[2px] bg-[#d4af37]/60 rounded-full"></div>
+                <img src="/amania.png" alt="Logo Amania" className="h-14 object-contain drop-shadow-sm" />
+              </div>
+              
+              <h2 className="text-[11px] font-bold text-[#4a154b] tracking-[0.25em] uppercase">
+                Akademisi dan Saintis Indonesia (ASASI)
+              </h2>
+              {/* Jarak bawah diperbesar sedikit sebagai pengganti teks yang dihapus */}
+              <div className="h-[2px] w-56 bg-[#d4af37] mt-1.5 mb-2"></div>
+            </div>
+
+            {/* Area Judul & Penerima */}
+            <div className="text-center mt-1">
+              <h1 className="font-serif text-[50px] font-black text-[#4a154b] tracking-widest uppercase mb-1 drop-shadow-sm">
+                Sertifikat
+              </h1>
+              <p className="text-[15px] tracking-[0.6em] text-[#d4af37] font-bold mb-5">
+                PENGHARGAAN
+              </p>
+
+              <p className="text-[#4b5563] text-xs mb-2 font-medium uppercase tracking-wider">Diberikan Dengan Penuh Rasa Bangga Kepada:</p>
+              
+              <div className="inline-block border-b-[2px] border-[#4a154b] px-12 pb-1 mb-4">
+                <h2 className="font-serif text-[34px] text-[#111827] font-bold">
+                  {participantName || "Nama Peserta Kosong"}
+                </h2>
+              </div>
+
+              <p className="text-[#4b5563] text-[13px] leading-relaxed max-w-2xl mx-auto mb-1">
+                Atas partisipasi aktif dan dedikasinya sebagai <span className="font-bold text-[#4a154b]">PESERTA</span> dalam Webinar Nasional:
+              </p>
+              <p className="text-[20px] font-bold text-[#0f5132] mt-1 mb-2 leading-snug drop-shadow-sm">
+                "Kupas Tuntas Perhitungan AK Dosen Terbaru: <br/> Mengacu Permendiktisaintek No. 52 Tahun 2025"
+              </p>
+              
+              {/* DESKRIPSI SESUAI PAMFLET */}
+              <p className="text-[#4b5563] text-[12px] leading-relaxed max-w-3xl mx-auto mb-3">
+                Membahas mekanisme perhitungan angka kredit (AK) sesuai Permendiktisaintek No. 52 Tahun 2025, termasuk komponen penilaian tridharma. Insight praktis untuk mengoptimalkan perolehan AK dalam mendukung kenaikan jabatan akademik.
+              </p>
+
+              <p className="text-[#6b7280] text-[11px] font-medium italic">
+                Diselenggarakan secara virtual (Live Zoom) pada Sabtu, 02 Mei 2026.
+              </p>
+            </div>
+
+            {/* Footer: Nomor Sertifikat & Tanda Tangan */}
+            <div className="w-full flex justify-between items-end mt-auto mb-1 relative">
+              
+              {/* Kiri: Nomor */}
+              <div className="pb-3">
+                <p className="text-[12px] text-[#4a154b] font-mono font-bold">
+                  No: <span className="text-[#4b5563] font-medium">{certNumber || "____/___/____/___"}</span>
+                </p>
+              </div>
+
+              {/* Kanan: Area Tanda Tangan Resmi */}
+              <div className="flex flex-col items-center w-56 relative">
+                <p className="text-[#4a154b] text-[12px] font-bold mb-0">Ketua Umum ASASI</p>
+                
+                <div className="w-40 h-16 flex items-center justify-center relative my-0.5 z-10">
+                  <img 
+                    src="/elfahmi.png" 
+                    alt="Tanda Tangan" 
+                    className="object-contain w-full h-full absolute"
+                  />
+                </div>
+                
+                <div className="text-center w-full z-10">
+                  <p className="font-bold text-[#111827] text-[13px] border-b-[2px] border-[#111827] pb-0.5 w-full inline-block">
+                    Prof. Elfahmi, S.Si., M.Si.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }
