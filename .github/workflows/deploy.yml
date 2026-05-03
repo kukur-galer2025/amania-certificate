@@ -3,14 +3,14 @@ name: Deploy Next.js to CloudPanel
 on:
   push:
     branches:
-      - main # Script berjalan setiap ada push ke branch main
+      - main 
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # <-- (Perbaikan Warning) Menggunakan versi terbaru v4
 
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@master
@@ -20,7 +20,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /htdocs/sertifikat.amania.id
+            # (Perbaikan Error) Menggunakan ~/htdocs agar mulai dari folder user
+            cd ~/htdocs/sertifikat.amania.id
             git pull origin main
             npm install
             npm run build
