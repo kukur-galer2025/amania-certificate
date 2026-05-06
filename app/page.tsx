@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion } from "framer-motion";
 import { Download, Loader2, User, Hash } from "lucide-react";
 import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
@@ -11,7 +10,7 @@ export default function CertificateView() {
   const [isDownloading, setIsDownloading] = useState(false);
 
   // State Dinamis
-  const [participantName, setParticipantName] = useState("Prima Dzaky S.Kom, M.Kom");
+  const [participantName, setParticipantName] = useState("Dr. Darwanis, SE, MSi, Ak, CA, Asean CPA");
   const [certNumber, setCertNumber] = useState("ASASI-AMANIA");
 
   const handleDownloadPDF = async () => {
@@ -56,11 +55,7 @@ export default function CertificateView() {
     <div className="min-h-screen w-full bg-[#e2e8f0] flex flex-col items-center justify-center p-4 sm:p-8 font-sans">
       
       {/* PANEL KENDALI */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-[1000px] bg-white p-6 rounded-2xl shadow-md border border-gray-200 mb-6 relative overflow-hidden"
-      >
+      <div className="w-full max-w-[1000px] bg-white p-6 rounded-2xl shadow-md border border-gray-200 mb-6 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-2 h-full bg-[#4a154b]"></div>
         <div className="flex flex-col md:flex-row gap-6 mb-2 pl-4">
           <div className="flex-1">
@@ -94,23 +89,21 @@ export default function CertificateView() {
           <button 
             onClick={handleDownloadPDF}
             disabled={isDownloading || !participantName.trim()}
-            className="flex items-center gap-2 px-8 py-3 bg-[#4a154b] text-[#ffffff] rounded-full font-bold shadow-lg hover:bg-[#310e32] hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+            className="flex items-center gap-2 px-8 py-3 bg-[#4a154b] text-[#ffffff] rounded-full font-bold shadow-lg hover:bg-[#310e32] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {isDownloading ? <Loader2 size={18} className="animate-spin" /> : <Download size={18} />}
             {isDownloading ? "Menyiapkan Dokumen..." : "Unduh Sertifikat HD"}
           </button>
         </div>
-      </motion.div>
+      </div>
 
       {/* WRAPPER SERTIFIKAT */}
       <div className="w-full max-w-[1000px] overflow-x-auto shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex justify-center bg-[#ffffff]">
         
         {/* AREA CANVAS */}
-        <motion.div 
+        <div 
           ref={certificateRef}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="relative flex-shrink-0 overflow-hidden bg-white"
+          className="relative flex-shrink-0 overflow-hidden bg-white mx-auto"
           style={{ width: "1000px", height: "707px" }} 
         >
           {/* BORDER DIPLOMA EKSKLUSIF */}
@@ -133,49 +126,52 @@ export default function CertificateView() {
           </div>
 
           {/* KONTEN UTAMA */}
-          <div className="relative z-20 w-full h-full px-28 py-14 flex flex-col justify-between">
+          <div className="relative z-20 w-full h-full px-28 py-12 flex flex-col justify-between">
             
             {/* Header Instansi dengan 2 Logo */}
-            <div className="flex flex-col items-center mt-1">
-              <div className="flex justify-center items-center gap-8 mb-3">
-                <img src="/asasi.png" alt="Logo ASASI" className="h-14 object-contain drop-shadow-sm" />
-                <div className="h-10 w-[2px] bg-[#d4af37]/60 rounded-full"></div>
-                <img src="/amania.png" alt="Logo Amania" className="h-14 object-contain drop-shadow-sm" />
+            <div className="flex flex-col items-center mt-2">
+              <div className="flex justify-center items-center gap-8 mb-2">
+                <img src="/asasi.png" alt="Logo ASASI" className="h-12 object-contain drop-shadow-sm" />
+                <div className="h-8 w-[2px] bg-[#d4af37]/60 rounded-full"></div>
+                <img src="/amania.png" alt="Logo Amania" className="h-12 object-contain drop-shadow-sm" />
               </div>
               
               <h2 className="text-[11px] font-bold text-[#4a154b] tracking-[0.25em] uppercase">
                 Akademisi dan Saintis Indonesia (ASASI)
               </h2>
-              {/* Jarak bawah diperbesar sedikit sebagai pengganti teks yang dihapus */}
-              <div className="h-[2px] w-56 bg-[#d4af37] mt-1.5 mb-2"></div>
+              <div className="h-[2px] w-56 bg-[#d4af37] mt-1.5 mb-1"></div>
             </div>
 
             {/* Area Judul & Penerima */}
             <div className="text-center mt-1">
-              <h1 className="font-serif text-[50px] font-black text-[#4a154b] tracking-widest uppercase mb-1 drop-shadow-sm">
+              <h1 className="font-serif text-[46px] font-black text-[#4a154b] tracking-widest uppercase mb-1 drop-shadow-sm leading-none">
                 Sertifikat
               </h1>
-              <p className="text-[15px] tracking-[0.6em] text-[#d4af37] font-bold mb-5">
+              <p className="text-[14px] tracking-[0.6em] text-[#d4af37] font-bold mb-3">
                 PENGHARGAAN
               </p>
 
-              <p className="text-[#4b5563] text-xs mb-2 font-medium uppercase tracking-wider">Diberikan Dengan Penuh Rasa Bangga Kepada:</p>
+              <p className="text-[#4b5563] text-xs mb-1 font-medium uppercase tracking-wider">
+                Diberikan Dengan Penuh Rasa Bangga Kepada:
+              </p>
               
-              <div className="inline-block border-b-[2px] border-[#4a154b] px-12 pb-1 mb-4">
-                <h2 className="font-serif text-[34px] text-[#111827] font-bold">
+              {/* PERBAIKAN OVERFLOW NAMA: Layout diganti menggunakan flexbox terpisah untuk garis bawah */}
+              <div className="flex flex-col items-center justify-center w-full mb-3 mt-1">
+                <h2 className="font-serif text-[32px] leading-snug text-[#111827] font-bold text-center w-full max-w-[850px] text-balance">
                   {participantName || "Nama Peserta Kosong"}
                 </h2>
+                {/* Garis bawah dibuat terpisah agar tidak melar secara aneh saat teks turun baris */}
+                <div className="w-[85%] max-w-[700px] h-[2px] bg-[#4a154b] mt-1.5"></div>
               </div>
 
               <p className="text-[#4b5563] text-[13px] leading-relaxed max-w-2xl mx-auto mb-1">
                 Atas partisipasi aktif dan dedikasinya sebagai <span className="font-bold text-[#4a154b]">PESERTA</span> dalam Webinar Nasional:
               </p>
-              <p className="text-[20px] font-bold text-[#0f5132] mt-1 mb-2 leading-snug drop-shadow-sm">
+              <p className="text-[18px] font-bold text-[#0f5132] mt-0.5 mb-1.5 leading-snug drop-shadow-sm">
                 "Kupas Tuntas Perhitungan AK Dosen Terbaru: <br/> Mengacu Permendiktisaintek No. 52 Tahun 2025"
               </p>
               
-              {/* DESKRIPSI SESUAI PAMFLET */}
-              <p className="text-[#4b5563] text-[12px] leading-relaxed max-w-3xl mx-auto mb-3">
+              <p className="text-[#4b5563] text-[12px] leading-relaxed max-w-3xl mx-auto mb-2">
                 Membahas mekanisme perhitungan angka kredit (AK) sesuai Permendiktisaintek No. 52 Tahun 2025, termasuk komponen penilaian tridharma. Insight praktis untuk mengoptimalkan perolehan AK dalam mendukung kenaikan jabatan akademik.
               </p>
 
@@ -185,7 +181,7 @@ export default function CertificateView() {
             </div>
 
             {/* Footer: Nomor Sertifikat & Tanda Tangan */}
-            <div className="w-full flex justify-between items-end mt-auto mb-1 relative">
+            <div className="w-full flex justify-between items-end mt-auto relative">
               
               {/* Kiri: Nomor */}
               <div className="pb-3">
@@ -215,7 +211,7 @@ export default function CertificateView() {
 
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
