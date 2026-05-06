@@ -9,7 +9,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      # Variabel ini ditambahkan untuk menghilangkan warning Node.js 20
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout Code
@@ -23,10 +22,25 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
+            # 1. Masuk ke direktori project Anda di CloudPanel
             cd ~/htdocs/sertifikat.amania.id
-            git pull origin main
+
+            # 2. Load NVM (Wajib ada! Tanpa ini, SSH Github Actions tidak tahu perintah 'npm' itu apa)
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            # 3. Sinkronisasi Git Paksa (Menghindari error git pull jika ada file terganti di server)
+            git fetch --all
+            git reset --hard origin/main
+
+            # 4. Hapus cache lama Next.js (Agar UI benar-benar update 100% setelah build)
+            rm -rf .next/cache
+
+            # 5. Install ulang package & Build aplikasi
             npm install
             npm run build
-            # Mematikan proses node lama milik user ini. CloudPanel akan otomatis menyalakannya ulang.
-            # Tambahan "|| true" agar script tidak error jika kebetulan prosesnya memang sedang mati.
-            pkill -u amania-sertifikat node || true
+
+            # 6. Restart Server Node.js
+            # Perintah ini mencoba restart lewat PM2 (bawaan CloudPanel), 
+            # jika PM2 tidak terdeteksi, ia akan mundur memakai pkill.
+            pm2 restart all || pkill -u amania-sertifikat node || true
