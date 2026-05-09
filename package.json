@@ -2,10 +2,10 @@
   "name": "e-certificate-webinar",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
+"scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 3001",
+    "start": "next start -p 3005",
     "lint": "eslint"
   },
   "dependencies": {
