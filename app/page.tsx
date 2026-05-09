@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Download, Loader2, User, Hash } from "lucide-react";
+import { Download, Loader2, User, Hash, Award } from "lucide-react";
 import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 
@@ -12,6 +12,7 @@ export default function CertificateView() {
   // State Dinamis
   const [participantName, setParticipantName] = useState("Dr. Darwanis, SE, MSi, Ak, CA, Asean CPA");
   const [certNumber, setCertNumber] = useState("ASASI-AMANIA");
+  const [role, setRole] = useState("PESERTA"); // State baru untuk Peran
 
   const handleDownloadPDF = async () => {
     if (!certificateRef.current) return;
@@ -41,7 +42,7 @@ export default function CertificateView() {
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
       
       const safeFileName = participantName.replace(/[^a-zA-Z0-9]/g, "_");
-      pdf.save(`Sertifikat_${safeFileName}.pdf`);
+      pdf.save(`Sertifikat_${role}_${safeFileName}.pdf`);
       
     } catch (error) {
       console.error("Gagal membuat PDF:", error);
@@ -57,8 +58,10 @@ export default function CertificateView() {
       {/* PANEL KENDALI */}
       <div className="w-full max-w-[1000px] bg-white p-6 rounded-2xl shadow-md border border-gray-200 mb-6 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-2 h-full bg-[#4a154b]"></div>
+        
+        {/* Input Form diubah menjadi 3 kolom */}
         <div className="flex flex-col md:flex-row gap-6 mb-2 pl-4">
-          <div className="flex-1">
+          <div className="flex-[2]">
             <label className="flex items-center gap-2 text-sm font-semibold text-[#4a154b] mb-2">
               <User size={16} /> Nama Peserta & Gelar
             </label>
@@ -72,6 +75,21 @@ export default function CertificateView() {
           </div>
 
           <div className="flex-1">
+            <label className="flex items-center gap-2 text-sm font-semibold text-[#4a154b] mb-2">
+              <Award size={16} /> Peran
+            </label>
+            <select 
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4a154b]/50 focus:border-[#4a154b] transition-all text-gray-800 font-medium cursor-pointer appearance-none"
+            >
+              <option value="PESERTA">PESERTA</option>
+              <option value="PEMBICARA">PEMBICARA</option>
+              <option value="PANITIA">PANITIA</option>
+            </select>
+          </div>
+
+          <div className="flex-[1.5]">
             <label className="flex items-center gap-2 text-sm font-semibold text-[#4a154b] mb-2">
               <Hash size={16} /> Nomor Sertifikat
             </label>
@@ -155,17 +173,17 @@ export default function CertificateView() {
                 Diberikan Dengan Penuh Rasa Bangga Kepada:
               </p>
               
-              {/* PERBAIKAN OVERFLOW NAMA: Layout diganti menggunakan flexbox terpisah untuk garis bawah */}
+              {/* PERBAIKAN OVERFLOW NAMA */}
               <div className="flex flex-col items-center justify-center w-full mb-3 mt-1">
                 <h2 className="font-serif text-[32px] leading-snug text-[#111827] font-bold text-center w-full max-w-[850px] text-balance">
                   {participantName || "Nama Peserta Kosong"}
                 </h2>
-                {/* Garis bawah dibuat terpisah agar tidak melar secara aneh saat teks turun baris */}
                 <div className="w-[85%] max-w-[700px] h-[2px] bg-[#4a154b] mt-1.5"></div>
               </div>
 
               <p className="text-[#4b5563] text-[13px] leading-relaxed max-w-2xl mx-auto mb-1">
-                Atas partisipasi aktif dan dedikasinya sebagai <span className="font-bold text-[#4a154b]">PESERTA</span> dalam Webinar Nasional:
+                {/* STATE PERAN DITEMPATKAN DI SINI */}
+                Atas partisipasi aktif dan dedikasinya sebagai <span className="font-bold text-[#4a154b] uppercase">{role}</span> dalam Webinar Nasional:
               </p>
               <p className="text-[18px] font-bold text-[#0f5132] mt-0.5 mb-1.5 leading-snug drop-shadow-sm">
                 "Kupas Tuntas Perhitungan AK Dosen Terbaru: <br/> Mengacu Permendiktisaintek No. 52 Tahun 2025"
