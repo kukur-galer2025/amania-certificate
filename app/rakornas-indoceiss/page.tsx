@@ -84,6 +84,7 @@ export default function CertificateGeneratorIndoCEISS() {
             >
               <option value="PESERTA">PESERTA</option>
               <option value="NARASUMBER">NARASUMBER</option>
+              <option value="MODERATOR">MODERATOR</option>
               <option value="PANITIA">PANITIA</option>
             </select>
           </div>
@@ -209,28 +210,30 @@ export default function CertificateGeneratorIndoCEISS() {
               
               {/* Kiri: TTD Ketua Panitia (Kusrini) */}
               <div className="flex flex-col items-center w-64 relative text-center">
-                    <p className="text-teal-950 text-[12px] font-bold mb-1">Ketua Panitia,</p>
-                    <div className="w-44 h-20 flex items-center justify-center relative my-1 z-10">
+                    {/* Teks diubah jadi hitam pekat */}
+                    <p className="text-[#0f172a] text-[12px] font-bold mb-1">Ketua Panitia,</p>
+                    <div className="w-40 h-16 flex items-center justify-center relative my-1 z-10">
                         <img src="/kusrini.png" alt="Tanda Tangan Kusrini" className="object-contain w-full h-full absolute" />
                     </div>
-                    <p className="font-extrabold text-gray-950 text-[13px] border-b-2 border-teal-900 pb-0.5 w-full inline-block relative z-20 mt-1">
-                        Prof. Dr. Kusrini, M.Kom
+                    {/* Garis bawah & Nama diubah jadi hitam pekat */}
+                    <p className="font-extrabold text-[#0f172a] text-[13px] border-b-2 border-[#0f172a] pb-0.5 w-full inline-block relative z-20 mt-1">
+                        Prof. Dr. Kusrini, M.Kom.
                     </p>
               </div>
 
               {/* Kanan: TTD Ketua Umum IndoCEISS (Hartati) + CAP */}
               <div className="flex flex-col items-center w-64 relative text-center">
-                    <p className="text-purple-950 text-[12px] font-bold mb-1">Ketua Umum IndoCEISS,</p>
+                    {/* Teks diubah jadi hitam pekat */}
+                    <p className="text-[#0f172a] text-[12px] font-bold mb-1">Ketua Umum IndoCEISS,</p>
                     
-                    {/* CONTAINER DIPERBESAR AGAR LEBIH JELAS */}
                     <div className="w-52 h-24 flex items-center justify-center relative my-1">
-                        {/* 1. TANDA TANGAN DULU (z-10, dicetak paling dasar) */}
+                        {/* 1. TANDA TANGAN */}
                         <img 
                           src="/hartati.png" 
                           alt="Tanda Tangan Hartati" 
                           className="object-contain w-full h-full absolute z-10 mix-blend-multiply" 
                         />
-                        {/* 2. BARU DI-CAP DI ATASNYA (z-20, ukuran cap diperbesar & opacity 100%) */}
+                        {/* 2. CAP */}
                         <img 
                           src="/capindo.png" 
                           alt="Cap IndoCEISS" 
@@ -238,7 +241,8 @@ export default function CertificateGeneratorIndoCEISS() {
                         />
                     </div>
 
-                    <p className="font-extrabold text-purple-950 text-[13px] border-b-2 border-purple-950 pb-0.5 w-full inline-block relative z-30 mt-1">
+                    {/* Garis bawah & Nama diubah jadi hitam pekat */}
+                    <p className="font-extrabold text-[#0f172a] text-[13px] border-b-2 border-[#0f172a] pb-0.5 w-full inline-block relative z-30 mt-1">
                         Prof. Dra. Sri Hartati, M.Sc., Ph.D.
                     </p>
               </div>
