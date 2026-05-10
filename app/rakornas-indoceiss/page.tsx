@@ -12,7 +12,7 @@ export default function CertificateGeneratorIndoCEISS() {
   // State Dinamis (Input User)
   const [participantName, setParticipantName] = useState("Prima Dzaky, S.Kom., M.Kom.");
   const [certNumber, setCertNumber] = useState("No: 05/INDO-WEB/V/2026");
-  const [role, setRole] = useState("PEMBICARA"); // Default Peran
+  const [role, setRole] = useState("NARASUMBER");
 
   const handleDownloadPDF = async () => {
     if (!certificateRef.current) return;
@@ -55,7 +55,7 @@ export default function CertificateGeneratorIndoCEISS() {
   return (
     <div className="min-h-screen w-full bg-[#f1f5f9] flex flex-col items-center justify-center p-6 font-sans overflow-auto">
       
-      {/* PANEL KENDALI MODERN DENGAN NUANSA HIJAU/ORANGE */}
+      {/* PANEL KENDALI MODERN */}
       <div className="w-full max-w-[1000px] bg-white p-6 rounded-2xl shadow-xl border border-gray-100 mb-6 relative overflow-hidden flex-shrink-0">
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-orange-400 via-teal-500 to-purple-600"></div>
         
@@ -83,7 +83,7 @@ export default function CertificateGeneratorIndoCEISS() {
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-300 cursor-pointer font-medium text-gray-800"
             >
               <option value="PESERTA">PESERTA</option>
-              <option value="PEMBICARA">PEMBICARA</option>
+              <option value="NARASUMBER">NARASUMBER</option>
               <option value="PANITIA">PANITIA</option>
             </select>
           </div>
@@ -114,10 +114,10 @@ export default function CertificateGeneratorIndoCEISS() {
         </div>
       </div>
 
-      {/* WRAPPER SERTIFIKAT DENGAN DESAIN MENAWAN */}
+      {/* WRAPPER SERTIFIKAT */}
       <div className="w-full max-w-[1000px] overflow-x-auto shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex justify-center bg-[#ffffff] rounded-3xl p-1 relative border-4 border-white">
         
-        {/* AREA CANVAS DESAIN BARU (NUANSA OREN-HIJAU-UNGU) */}
+        {/* AREA CANVAS DESAIN BARU */}
         <div 
           ref={certificateRef}
           className="relative flex-shrink-0 overflow-hidden bg-white mx-auto rounded-3xl"
@@ -140,7 +140,7 @@ export default function CertificateGeneratorIndoCEISS() {
             </div>
           </div>
 
-          {/* WATERMARK LOGO INDOCEISS DI TENGAH (Tembus Pandang) */}
+          {/* WATERMARK LOGO INDOCEISS DI TENGAH */}
           <div className="absolute inset-0 flex items-center justify-center opacity-[0.04] pointer-events-none z-0">
              <img src="/indoceiss-logo.png" alt="Watermark IndoCEISS" className="w-[350px] h-[350px] object-contain grayscale" />
           </div>
@@ -148,7 +148,7 @@ export default function CertificateGeneratorIndoCEISS() {
           {/* KONTEN UTAMA */}
           <div className="relative z-20 w-full h-full px-24 py-12 flex flex-col justify-between items-center">
             
-            {/* Header Instansi: Hanya Logo IndoCEISS & Amania */}
+            {/* Header Instansi */}
             <div className="flex flex-col items-center mt-3">
               <div className="flex justify-center items-center gap-10">
                 <img src="/indoceiss-logo.png" alt="Logo IndoCEISS" className="h-16 object-contain" />
@@ -168,7 +168,7 @@ export default function CertificateGeneratorIndoCEISS() {
 
               {/* NOMOR SERTIFIKAT DITENGAH */}
               <div className="bg-slate-50 px-6 py-1.5 rounded-full border border-slate-200 mb-6 shadow-sm">
-                <p className="text-slate-700 text-[13px] font-mono font-bold tracking-widest">
+                <p className="text-slate-700 text-[13px] font-mono font-bold tracking-widest uppercase">
                   {certNumber || "NO: .../..."}
                 </p>
               </div>
@@ -189,9 +189,9 @@ export default function CertificateGeneratorIndoCEISS() {
                 Atas dedikasi, partisipasi aktif, dan kontribusinya sebagai <span className="px-2 py-0.5 bg-orange-100 text-orange-800 rounded font-bold uppercase text-[12px]">{role}</span> dalam Webinar Nasional:
               </p>
               
-              {/* JUDUL WEBINAR */}
+              {/* JUDUL WEBINAR DENGAN KATA RESEARCH */}
               <p className="text-[19px] font-extrabold text-purple-900 mt-0.5 mb-2.5 leading-snug uppercase tracking-tight max-w-[700px]">
-                "WEBINAR ROAD TO RAKORNAS INDOCEISS"
+                "WEBINAR RESEARCH: ROAD TO RAKORNAS INDOCEISS"
               </p>
               
               {/* DETAIL TANGGAL */}
@@ -204,29 +204,41 @@ export default function CertificateGeneratorIndoCEISS() {
               </div>
             </div>
 
-            {/* Footer: 2 Tanda Tangan (IndoCEISS & Panitia) Tanpa Nomor di Bawah */}
+            {/* Footer: 2 Tanda Tangan (IndoCEISS & Panitia) */}
             <div className="w-full flex justify-between items-end mt-auto relative px-10">
               
               {/* Kiri: TTD Ketua Panitia (Kusrini) */}
-              <div className="flex flex-col items-center w-60 relative text-center">
+              <div className="flex flex-col items-center w-64 relative text-center">
                     <p className="text-teal-950 text-[12px] font-bold mb-1">Ketua Panitia,</p>
-                    <div className="w-40 h-16 flex items-center justify-center relative my-1 z-10">
-                        {/* PASTIKAN NAMA FILE DI PUBLIC ADALAH kusrini.png */}
+                    <div className="w-44 h-20 flex items-center justify-center relative my-1 z-10">
                         <img src="/kusrini.png" alt="Tanda Tangan Kusrini" className="object-contain w-full h-full absolute" />
                     </div>
-                    <p className="font-extrabold text-gray-950 text-[13px] border-b-2 border-teal-900 pb-0.5 w-full inline-block">
+                    <p className="font-extrabold text-gray-950 text-[13px] border-b-2 border-teal-900 pb-0.5 w-full inline-block relative z-20 mt-1">
                         Prof. Dr. Kusrini, M.Kom
                     </p>
               </div>
 
-              {/* Kanan: TTD Ketua Umum IndoCEISS (Hartati) */}
-              <div className="flex flex-col items-center w-60 relative text-center">
+              {/* Kanan: TTD Ketua Umum IndoCEISS (Hartati) + CAP */}
+              <div className="flex flex-col items-center w-64 relative text-center">
                     <p className="text-purple-950 text-[12px] font-bold mb-1">Ketua Umum IndoCEISS,</p>
-                    <div className="w-40 h-16 flex items-center justify-center relative my-1 z-10">
-                        {/* PASTIKAN NAMA FILE DI PUBLIC ADALAH hartati.png */}
-                        <img src="/hartati.png" alt="Tanda Tangan Hartati" className="object-contain w-full h-full absolute" />
+                    
+                    {/* CONTAINER DIPERBESAR AGAR LEBIH JELAS */}
+                    <div className="w-52 h-24 flex items-center justify-center relative my-1">
+                        {/* 1. TANDA TANGAN DULU (z-10, dicetak paling dasar) */}
+                        <img 
+                          src="/hartati.png" 
+                          alt="Tanda Tangan Hartati" 
+                          className="object-contain w-full h-full absolute z-10 mix-blend-multiply" 
+                        />
+                        {/* 2. BARU DI-CAP DI ATASNYA (z-20, ukuran cap diperbesar & opacity 100%) */}
+                        <img 
+                          src="/capindo.png" 
+                          alt="Cap IndoCEISS" 
+                          className="absolute w-28 h-28 object-contain opacity-100 z-20 transform -rotate-12 mix-blend-multiply" 
+                        />
                     </div>
-                    <p className="font-extrabold text-purple-950 text-[13px] border-b-2 border-purple-950 pb-0.5 w-full inline-block">
+
+                    <p className="font-extrabold text-purple-950 text-[13px] border-b-2 border-purple-950 pb-0.5 w-full inline-block relative z-30 mt-1">
                         Prof. Dra. Sri Hartati, M.Sc., Ph.D.
                     </p>
               </div>
