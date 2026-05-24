@@ -183,7 +183,7 @@ export default function CertificateView() {
 
               <p className="text-[#4b5563] text-[13px] leading-relaxed max-w-2xl mx-auto mb-1">
                 {/* STATE PERAN DITEMPATKAN DI SINI */}
-                Atas partisipasi aktif dan dedikasinya sebagai <span className="font-bold text-[#4a154b] uppercase">{role}</span> dalam Webinar Nasional:
+                Atas partisipasi aktif dan dedikasinya sebagai <span className="font-bold text-[#4a154b] uppercase">{role}</span> dalam acara Nasional:
               </p>
               <p className="text-[18px] font-bold text-[#0f5132] mt-0.5 mb-1.5 leading-snug drop-shadow-sm">
                 "Kupas Tuntas Perhitungan AK Dosen Terbaru: <br/> Mengacu Permendiktisaintek No. 52 Tahun 2025"
@@ -194,7 +194,7 @@ export default function CertificateView() {
               </p>
 
               <p className="text-[#6b7280] text-[11px] font-medium italic">
-                Diselenggarakan secara virtual (Live Zoom) pada Sabtu, 02 Mei 2026.
+                Diselenggarakan pada Sabtu, 02 Mei 2026.
               </p>
             </div>
 
@@ -212,13 +212,21 @@ export default function CertificateView() {
               <div className="flex flex-col items-center w-56 relative">
                 <p className="text-[#4a154b] text-[12px] font-bold mb-0">Ketua Umum ASASI</p>
                 
-                <div className="w-40 h-16 flex items-center justify-center relative my-0.5 z-10">
-                  <img 
-                    src="/elfahmi.png" 
-                    alt="Tanda Tangan" 
-                    className="object-contain w-full h-full absolute"
-                  />
-                </div>
+                <div className="h-20 w-44 relative flex items-center justify-center my-2 pb-6">
+                {/* Cap/Stamp ASASI */}
+                <img 
+                  src="/capasasi.png" 
+                  alt="Cap ASASI" 
+                  className="absolute w-24 h-24 object-contain pointer-events-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" 
+                  style={{ opacity: 0.35 }} 
+                />
+                {/* Tanda Tangan (Dipertebal maksimal lewat kontras ekstra tinggi dan penyesuaian kecerahan, ditambah shadow) */}
+                <img 
+                  src="/elfahmi.png" 
+                  alt="Tanda Tangan" 
+                  className="object-contain max-h-full max-w-full opacity-100 scale-110 relative z-10 filter contrast-200 brightness-75 drop-shadow-[0.5px_0.5px_0px_rgba(0,0,0,0.15)] drop-shadow-md" 
+                />
+              </div>
                 
                 <div className="text-center w-full z-10">
                   <p className="font-bold text-[#111827] text-[13px] border-b-[2px] border-[#111827] pb-0.5 w-full inline-block">

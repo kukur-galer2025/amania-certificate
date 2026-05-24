@@ -224,7 +224,7 @@ export default function CertificateWebinarAKPremium() {
                 </span>
 
                 <p className="text-slate-600 text-[13px] font-medium">
-                  dalam rangkaian acara Webinar Nasional:
+                  dalam rangkaian acara Nasional:
                 </p>
               </div>
               
@@ -263,8 +263,20 @@ export default function CertificateWebinarAKPremium() {
               <div className="flex flex-col items-center w-64 relative text-center">
                   {/* Teks warna biru tua */}
                   <p className="text-[#1e3a8a] text-[12px] font-bold mb-1 uppercase tracking-widest">Ketua Umum ASASI</p>
-                  <div className="w-48 h-16 flex items-center justify-center relative my-1 z-10">
-                      <img src="/elfahmi.png" alt="Tanda Tangan Elfahmi" className="object-contain w-full h-full absolute" />
+                  <div className="h-20 w-44 relative flex items-center justify-center my-2 pb-6">
+                    {/* Cap/Stamp ASASI */}
+                    <img 
+                      src="/capasasi.png" 
+                      alt="Cap ASASI" 
+                      className="absolute w-24 h-24 object-contain pointer-events-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0" 
+                      style={{ opacity: 0.35 }} 
+                    />
+                    {/* Tanda Tangan (Dipertebal maksimal lewat kontras ekstra tinggi dan penyesuaian kecerahan, ditambah shadow) */}
+                    <img 
+                      src="/elfahmi.png" 
+                      alt="Tanda Tangan" 
+                      className="object-contain max-h-full max-w-full opacity-100 scale-110 relative z-10 filter contrast-200 brightness-75 drop-shadow-[0.5px_0.5px_0px_rgba(0,0,0,0.15)] drop-shadow-md" 
+                    />
                   </div>
                   {/* Garis warna biru */}
                   <div className="w-full border-b border-[#1e3a8a]/30 pb-1">

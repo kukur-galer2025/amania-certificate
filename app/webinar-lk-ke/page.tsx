@@ -63,7 +63,6 @@ export default function CertificateWebinarAKPremium() {
         }
 
         // Petakan kolom Excel ke properti state aplikasi
-        // Sesuai template: "Nama Lengkap & Gelar", "Peran / Jabatan", "Nomor Sertifikat"
         const formattedData: ParticipantData[] = rawData.map((row) => ({
           name: row["Nama Lengkap & Gelar"] || row["Nama"] || "Tanpa Nama",
           role: (row["Peran / Jabatan"] || row["Peran"] || "PESERTA").toUpperCase().trim(),
@@ -118,14 +117,12 @@ export default function CertificateWebinarAKPremium() {
       setIsDownloading(true);
       const zip = new JSZip();
 
-      // Looping data satu per satu
       for (let i = 0; i < participants.length; i++) {
         setBulkProgress(`Memproses (${i + 1}/${participants.length}): ${participants[i].name}`);
 
-        // Pindahkan index navigasi aktif agar UI sertifikat me-render data orang tersebut
         setCurrentIndex(i);
 
-        // Beri jeda 350ms agar React selesai merender teks baru ke DOM sebelum di-snapshot
+        // Jeda untuk render DOM ulang secara asinkronus sebelum snapshot
         await new Promise((resolve) => setTimeout(resolve, 350));
 
         const imgData = await toPng(certificateRef.current, { pixelRatio: 3, backgroundColor: '#ffffff' });
@@ -155,7 +152,7 @@ export default function CertificateWebinarAKPremium() {
 
       {/* PANEL UTAMA KENDALI */}
       <div className="w-full max-w-[1000px] bg-white p-6 rounded-3xl shadow-xl border border-slate-200 mb-8 relative flex-shrink-0">
-        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-900 via-emerald-600 to-blue-900"></div>
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-900 via-amber-500 to-blue-900"></div>
 
         {/* BARIS ATAS: IMPORT EXCEL */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-100 mt-2">
@@ -237,7 +234,7 @@ export default function CertificateWebinarAKPremium() {
             </span>
             <button 
               disabled={currentIndex === participants.length - 1 || isDownloading} 
-              onClick={() => setCurrentIndex(prev => prev - 1 + 2 - 1)} // Mengamankan increment safely
+              onClick={() => setCurrentIndex(prev => prev + 1)}
               className="p-1 text-slate-600 hover:text-blue-900 disabled:opacity-30"
             >
               <ChevronRight size={18} />
@@ -273,56 +270,92 @@ export default function CertificateWebinarAKPremium() {
         </div>
       </div>
 
-      {/* WRAPPER CANVAS SERTIFIKAT (SAMA SEPERTI SEMULA - MENGIKUTI PREVIEW DATA AKTIF) */}
-      <div className="w-full max-w-[1000px] overflow-x-auto shadow-[0_30px_60px_rgba(0,0,0,0.1)] flex justify-center bg-white rounded-sm">
+      {/* WRAPPER CANVAS SERTIFIKAT */}
+      <div className="w-full max-w-[1000px] overflow-x-auto shadow-[0_30px_60px_rgba(0,0,0,0.15)] flex justify-center bg-white rounded-sm">
         <div
           ref={certificateRef}
-          className="relative flex-shrink-0 overflow-hidden bg-[#fafbfe] mx-auto"
+          className="relative flex-shrink-0 overflow-hidden bg-[#fafafa] mx-auto flex flex-col items-center justify-between p-12 select-none"
           style={{ width: "1000px", height: "707px" }}
         >
-          <div className="absolute inset-0 z-0 pointer-events-none">
-            <div className="absolute bottom-[-15%] left-[-5%] w-[500px] h-[500px] bg-emerald-600 rounded-full opacity-[0.06] blur-[120px]"></div>
-            <div className="absolute top-[20%] left-[30%] w-[400px] h-[400px] bg-blue-900 rounded-full opacity-[0.03] blur-[100px]"></div>
+          {/* Efek Tekstur Halus Background (Dot Pattern) */}
+          <div className="absolute inset-0 z-0 opacity-[0.02] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]"></div>
+          
+          {/* Efek Gradasi Gradual Pusat Cerah (Background Effect) */}
+          <div className="absolute inset-0 z-0 opacity-40 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.08)_0%,transparent_65%)]"></div>
+
+          {/* EFEK BINGKAI GARIS GANDA PREMIUM */}
+          <div className="absolute inset-6 z-10 pointer-events-none border border-[#d4af37]/30 rounded-xs"></div>
+          <div className="absolute inset-[28px] z-10 pointer-events-none border-2 border-[#d4af37]/15 rounded-xs"></div>
+
+          {/* ORNAMEN SUDUT */}
+          <div className="absolute top-0 left-0 w-[420px] h-[300px] z-10 pointer-events-none">
+            <svg className="w-full h-full" viewBox="0 0 420 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 0H410 C340 70, 260 190, 0 160 V0Z" fill="#d4af37" />
+              <path d="M0 0H380 C310 60, 230 170, 0 140 V0Z" fill="#001f3f" />
+              <path d="M120 0C180 30, 250 80, 290 120" stroke="#d4af37" strokeWidth="1" strokeOpacity="0.3"/>
+            </svg>
           </div>
 
-          <div className="absolute top-0 right-0 w-[280px] h-[140px] bg-blue-950 z-10" style={{ clipPath: "polygon(100% 0, 0 0, 100% 100%)" }}></div>
-          <div className="absolute bottom-0 left-0 w-2.5 h-[300px] bg-emerald-500 z-10"></div>
-
-          <div className="absolute inset-0 z-10 p-10 pointer-events-none">
-            <div className="w-full h-full border-4 border-blue-950"></div>
+          <div className="absolute bottom-0 right-0 w-[420px] h-[300px] z-10 pointer-events-none">
+            <svg className="w-full h-full" viewBox="0 0 420 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M420 300H10 C80 230, 160 110, 420 140 V300Z" fill="#d4af37" />
+              <path d="M420 300H40 C110 240, 190 130, 420 160 V300Z" fill="#001f3f" />
+              <path d="M300 300C240 270, 170 220, 130 180" stroke="#d4af37" strokeWidth="1" strokeOpacity="0.3"/>
+            </svg>
           </div>
 
-          <div className="absolute top-6 right-8 z-20 text-right text-white">
-            <p className="text-[7px] text-slate-300 font-black uppercase tracking-widest mb-0.5">Registry No.</p>
-            <p className="font-mono font-bold text-[11px] tracking-wide text-emerald-400">{currentParticipant.number || "00/XYZ/2026"}</p>
-          </div>
-
-          <div className="relative z-20 w-full h-full p-16 flex flex-col justify-between">
-            <div className="w-full flex gap-12 mt-10 items-start">
-              <div className="w-[180px] flex items-center gap-4 border-r border-slate-200/80 pr-8 flex-shrink-0">
+          {/* LOGO BLOCK */}
+          <div className="absolute top-10 right-10 z-20 pointer-events-none">
+            <div className="flex items-center gap-4 flex-shrink-0 bg-white/40 p-2 rounded-xl backdrop-blur-sm">
                 <img src="/asasi.png" alt="Logo ASASI" className="h-9 object-contain object-left" />
                 <div className="w-[1px] h-6 bg-emerald-500 flex-shrink-0"></div>
                 <img src="/amania.png" alt="Logo Amania" className="h-6 object-contain object-left" />
-              </div>
+            </div>
+          </div>
 
-              <div className="flex-grow flex flex-col items-start text-left">
-                <span className="text-[10px] font-black tracking-[0.35em] text-emerald-600 uppercase mb-2">Honorary Certificate of Recognition</span>
-                <h1 className="font-sans font-black text-[46px] leading-[1.05] text-blue-950 tracking-wide uppercase mb-6">Sertifikat Penghargaan</h1>
-                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2">Diberikan Secara Khusus Kepada:</p>
-                <div className="w-full max-w-[560px] mb-4">
-                  <h2 className="font-sans font-black text-[34px] text-slate-900 tracking-wide leading-tight break-words">{currentParticipant.name || "Nama Peserta Kosong"}</h2>
-                  <div className="w-1/4 h-1 bg-gradient-to-r from-emerald-500 to-transparent mt-2"></div>
-                </div>
-                <div className="w-full max-w-[560px]">
-                  <p className="text-slate-600 text-[13px] font-medium leading-relaxed">Atas partisipasi aktif, sumbangsih, serta perannya sebagai <span className="font-black text-blue-950 tracking-wider uppercase underline decoration-emerald-500 decoration-2">{currentParticipant.role}</span> pada acara Nasional:</p>
-                  <p className="text-[16px] font-sans font-black text-blue-950 tracking-wide leading-snug mt-2.5">&ldquo;Kupas Tuntas Perhitungan AK Dosen: Studi Kasus Kenaikan Jabatan L ke LK Berdasarkan Regulasi Terbaru&rdquo;</p>
-                </div>
-              </div>
+          {/* KONTEN TENGAH */}
+          <div className="relative z-20 w-full h-full flex flex-col justify-between items-center py-6 text-center">
+            
+            <div className="flex flex-col items-center mt-12">
+              <h1 className="text-[#001f3f] font-sans tracking-[0.25em] text-[46px] font-bold uppercase leading-none">
+                Sertifikat
+              </h1>
+              <h2 className="text-[#001f3f] font-sans tracking-[0.35em] text-[18px] font-medium uppercase mt-2">
+                Penghargaan
+              </h2>
             </div>
 
-            <div className="w-full flex justify-between items-end border-t border-slate-100 pt-6 px-2 pb-2">
-              <div className="text-left w-[240px]">
-                <div className="h-20 w-44 relative flex items-center justify-center my-2 pb-6">
+            <div className="w-full flex flex-col items-center my-4">
+              <p className="font-serif italic text-slate-500 text-[15px] mb-4">
+                Diberikan kepada:
+              </p>
+              <h3 className="font-serif italic text-[42px] text-[#001f3f] px-12 font-medium leading-snug tracking-wide max-w-[800px] min-h-[64px] flex items-center justify-center">
+                {currentParticipant.name || "Nama Lengkap Peserta"}
+              </h3>
+              <div className="w-[500px] h-[1px] bg-slate-300 mt-4"></div>
+            </div>
+
+            <div className="max-w-[760px] text-slate-700 text-[13px] leading-relaxed px-4 flex flex-col items-center gap-1.5">
+              <p className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-widest mb-1">
+                No: {currentParticipant.number || "00/XYZ/2026"}
+              </p>
+              <p>
+                Telah menjadi <span className="font-bold text-[#001f3f] tracking-wide uppercase underline decoration-amber-500 decoration-2 underline-offset-4">{currentParticipant.role}</span> dalam acara Nasional:
+              </p>
+              <p className="font-sans font-black text-[#001f3f] text-[15px] max-w-[700px] my-1 leading-snug">
+                &ldquo;Kupas Tuntas Perhitungan AK Dosen: Studi Kasus Kenaikan Jabatan LK ke Guru Besar Berdasarkan Regulasi Terbaru&rdquo;
+              </p>
+              <p>
+                yang diselenggarakan pada tanggal <span className="font-bold text-amber-600">23 Mei 2026</span>
+              </p>
+            </div>
+
+            {/* Bagian Tanda Tangan Tunggal Terpusat */}
+            <div className="flex flex-col items-center mt-4 mb-2">
+              <p className="text-[11px] text-slate-500 font-medium tracking-wide uppercase">Ketua Umum ASASI</p>
+              
+              {/* Container Tanda Tangan (Ditambah tinggi ke h-20 & padding pb-6 agar berjarak aman dari garis) */}
+              <div className="h-20 w-44 relative flex items-center justify-center my-2 pb-6">
                 {/* Cap/Stamp ASASI */}
                 <img 
                   src="/capasasi.png" 
@@ -337,14 +370,14 @@ export default function CertificateWebinarAKPremium() {
                   className="object-contain max-h-full max-w-full opacity-100 scale-110 relative z-10 filter contrast-200 brightness-75 drop-shadow-[0.5px_0.5px_0px_rgba(0,0,0,0.15)] drop-shadow-md" 
                 />
               </div>
-                <p className="font-sans font-black text-base text-blue-950 tracking-wide leading-tight mt-1">Prof. Elfahmi, S.Si., M.Si.</p>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Ketua Umum ASASI</p>
-              </div>
-              <div className="text-right w-[240px]">
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Tanggal</p>
-                <p className="text-emerald-600 font-sans font-black text-sm tracking-wide">16 MEI 2026</p>
-              </div>
+              
+              <div className="w-52 h-[1px] bg-slate-400 my-1"></div>
+              
+              <p className="text-[13px] font-bold text-[#001f3f] tracking-wide">
+                Prof. Elfahmi, S.Si., M.Si.
+              </p>
             </div>
+
           </div>
         </div>
       </div>
