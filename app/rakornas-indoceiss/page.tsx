@@ -186,7 +186,7 @@ export default function CertificateGeneratorIndoCEISS() {
               </div>
 
               <p className="text-teal-900 text-[13px] leading-relaxed max-w-2xl mx-auto mb-2 font-semibold">
-                Atas dedikasi, partisipasi aktif, dan kontribusinya sebagai <span className="px-2 py-0.5 bg-orange-100 text-orange-800 rounded font-bold uppercase text-[12px]">{role}</span> dalam Webinar Nasional:
+                Atas dedikasi, partisipasi aktif, dan kontribusinya sebagai <span className="px-2 py-0.5 bg-orange-100 text-orange-800 rounded font-bold uppercase text-[12px]">{role}</span> dalam Acara Nasional:
               </p>
               
               <p className="text-[18px] font-extrabold text-purple-900 mt-0.5 mb-2.5 leading-snug uppercase tracking-tight max-w-[800px]">
@@ -196,7 +196,6 @@ export default function CertificateGeneratorIndoCEISS() {
               <div className="flex items-center gap-3 bg-slate-50 px-5 py-1.5 rounded-full border border-slate-100">
                   <p className="text-slate-600 text-[11px] font-medium uppercase tracking-wide">Sabtu, 09 Mei 2026</p>
                   <div className="w-1 h-1 bg-orange-400 rounded-full"></div>
-                  <p className="text-teal-800 text-[11px] font-semibold uppercase tracking-wide">Live Zoom Meeting</p>
               </div>
             </div>
 
